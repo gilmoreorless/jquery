@@ -74,7 +74,7 @@ jQuery.fn.extend({
 						for ( var c = 0, cl = classNames.length; c < cl; c++ ) {
 							className = className.replace(" " + classNames[c] + " ", " ");
 						}
-						elem.className = className.substring(1, className.length - 1);
+						elem.className = jQuery.trim( className );
 
 					} else {
 						elem.className = "";
@@ -330,7 +330,7 @@ jQuery.extend({
 		}
 
 		// elem is actually elem.style ... set the style
-		// Using attr for specific style information is now deprecated. Use style insead.
+		// Using attr for specific style information is now deprecated. Use style instead.
 		return jQuery.style( elem, name, value );
 	}
 });
