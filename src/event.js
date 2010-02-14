@@ -112,6 +112,10 @@ jQuery.event = {
 			
 			if ( special.add ) { 
 				special.add.call( elem, handleObj ); 
+
+				if ( !handleObj.handler.guid ) {
+					handleObj.handler.guid = handler.guid;
+				}
 			}
 
 			// Add the function to the element's handler list
@@ -221,7 +225,7 @@ jQuery.event = {
 			}
 
 			// remove generic event handler if no more handlers exist
-			if ( jQuery.isEmptyObject( events[ type ] ) ) {
+			if ( eventType.length === 0 || pos != null && eventType.length === 1 ) {
 				if ( !special.teardown || special.teardown.call( elem, namespaces ) === false ) {
 					removeEvent( elem, type, elemData.handle );
 				}
@@ -604,27 +608,24 @@ var withinElement = function( event ) {
 	// Check if mouse(over|out) are still within the same parent element
 	var parent = event.relatedTarget;
 
-	// Traverse up the tree
-	while ( parent && parent !== this ) {
-		// Firefox sometimes assigns relatedTarget a XUL element
-		// which we cannot access the parentNode property of
-		try {
+	// Firefox sometimes assigns relatedTarget a XUL element
+	// which we cannot access the parentNode property of
+	try {
+		// Traverse up the tree
+		while ( parent && parent !== this ) {
 			parent = parent.parentNode;
-
-		// assuming we've left the element since we most likely mousedover a xul element
-		} catch(e) {
-			break;
 		}
-	}
 
-	if ( parent !== this ) {
-		// set the correct event type
-		event.type = event.data;
+		if ( parent !== this ) {
+			// set the correct event type
+			event.type = event.data;
 
-		// handle event if we actually just moused on to a non sub-element
-		jQuery.event.handle.apply( this, arguments );
-	}
+			// handle event if we actually just moused on to a non sub-element
+			jQuery.event.handle.apply( this, arguments );
+		}
 
+	// assuming we've left the element since we most likely mousedover a xul element
+	} catch(e) { }
 },
 
 // In case of event delegation, we only need to rename the event.type,
@@ -769,6 +770,10 @@ if ( !jQuery.support.changeBubbles ) {
 		},
 
 		setup: function( data, namespaces ) {
+			if ( this.type === "file" ) {
+				return false;
+			}
+
 			for ( var type in changeFilters ) {
 				jQuery.event.add( this, type + ".specialChange", changeFilters[type] );
 			}
@@ -917,9 +922,16 @@ jQuery.fn.extend({
 	}
 });
 
+var liveMap = {
+	focus: "focusin",
+	blur: "focusout",
+	mouseenter: "mouseover",
+	mouseleave: "mouseout"
+};
+
 jQuery.each(["live", "die"], function( i, name ) {
 	jQuery.fn[ name ] = function( types, data, fn, origSelector /* Internal Use Only */ ) {
-		var type, i = 0, match, namespaces,
+		var type, i = 0, match, namespaces, preType,
 			selector = origSelector || this.selector,
 			context = origSelector ? this : jQuery( this.context );
 
@@ -939,18 +951,26 @@ jQuery.each(["live", "die"], function( i, name ) {
 				type = type.replace( rnamespaces, "" );
 			}
 
-			type = type === "focus" ? "focusin" : // focus --> focusin
-					type === "blur" ? "focusout" : // blur --> focusout
-					type === "hover" ? types.push("mouseleave" + namespaces) && "mouseenter" : // hover support
-					type;
+			if ( type === "hover" ) {
+				types.push( "mouseenter" + namespaces, "mouseleave" + namespaces );
+				continue;
+			}
 
-			type += namespaces;
+			preType = type;
+
+			if ( type === "focus" || type === "blur" ) {
+				types.push( liveMap[ type ] + namespaces );
+				type = type + namespaces;
+
+			} else {
+				type = (liveMap[ type ] || type) + namespaces;
+			}
 
 			if ( name === "live" ) {
 				// bind live handler
 				context.each(function(){
 					jQuery.event.add( this, liveConvert( type, selector ),
-						{ data: data, selector: selector, handler: fn, origType: type, origHandler: fn } );
+						{ data: data, selector: selector, handler: fn, origType: type, origHandler: fn, preType: preType } );
 				});
 
 			} else {
@@ -969,7 +989,7 @@ function liveHandler( event ) {
 		events = jQuery.data( this, "events" );
 
 	// Make sure we avoid non-left-click bubbling in Firefox (#3861)
-	if ( event.liveFired === this || !events || event.button && event.type === "click" ) {
+	if ( event.liveFired === this || !events || !events.live || event.button && event.type === "click" ) {
 		return;
 	}
 
@@ -999,7 +1019,7 @@ function liveHandler( event ) {
 				related = null;
 
 				// Those two events require additional checking
-				if ( handleObj.origType === "mouseenter" || handleObj.origType === "mouseleave" ) {
+				if ( handleObj.preType === "mouseenter" || handleObj.preType === "mouseleave" ) {
 					related = jQuery( event.relatedTarget ).closest( handleObj.selector )[0];
 				}
 

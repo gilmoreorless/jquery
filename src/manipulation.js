@@ -5,7 +5,7 @@ var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
 	rtagName = /<([\w:]+)/,
 	rtbody = /<tbody/i,
 	rhtml = /<|&#?\w+;/,
-	rnocache = /<script|<object|<embed/i,
+	rnocache = /<script|<object|<embed|<option|<style/i,
 	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,  // checked="checked" or checked (html5)
 	fcloseTag = function( all, front, tag ) {
 		return rselfClosing.test( tag ) ?
@@ -45,7 +45,7 @@ jQuery.fn.extend({
 			return this.empty().append( (this[0] && this[0].ownerDocument || document).createTextNode( text ) );
 		}
 
-		return jQuery.getText( this );
+		return jQuery.text( this );
 	},
 
 	wrapAll: function( html ) {
@@ -308,7 +308,7 @@ jQuery.fn.extend({
 	},
 
 	domManip: function( args, table, callback ) {
-		var results, first, value = args[0], scripts = [], fragment;
+		var results, first, value = args[0], scripts = [], fragment, parent;
 
 		// We can't cloneNode fragments that contain checked, in WebKit
 		if ( !jQuery.support.checkClone && arguments.length === 3 && typeof value === "string" && rchecked.test( value ) ) {
@@ -326,9 +326,12 @@ jQuery.fn.extend({
 		}
 
 		if ( this[0] ) {
+			parent = value && value.parentNode;
+
 			// If we're in a fragment, just use that instead of building a new one
-			if ( args[0] && args[0].parentNode && args[0].parentNode.nodeType === 11 ) {
-				results = { fragment: args[0].parentNode };
+			if ( jQuery.support.parentNode && parent && parent.nodeType === 11 && parent.childNodes.length === this.length ) {
+				results = { fragment: parent };
+
 			} else {
 				results = buildFragment( args, this, scripts );
 			}
@@ -437,9 +440,10 @@ jQuery.each({
 	replaceAll: "replaceWith"
 }, function( name, original ) {
 	jQuery.fn[ name ] = function( selector ) {
-		var ret = [], insert = jQuery( selector );
+		var ret = [], insert = jQuery( selector ),
+			parent = this.length === 1 && this[0].parentNode;
 		
-		if ( this.length === 1 && this[0].parentNode && this[0].parentNode.nodeType === 11 && insert.length === 1 ) {
+		if ( parent && parent.nodeType === 11 && parent.childNodes.length === 1 && insert.length === 1 ) {
 			insert[ original ]( this[0] );
 			return this;
 			
@@ -551,7 +555,9 @@ jQuery.extend({
 	},
 	
 	cleanData: function( elems ) {
-		var data, id, cache = jQuery.cache;
+		var data, id, cache = jQuery.cache,
+			special = jQuery.event.special,
+			deleteExpando = jQuery.support.deleteExpando;
 		
 		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
 			id = elem[ jQuery.expando ];
@@ -560,12 +566,22 @@ jQuery.extend({
 				data = cache[ id ];
 				
 				if ( data.events ) {
-					for ( var event in data.events ) {
-						removeEvent( elem, event, data.handle );
+					for ( var type in data.events ) {
+						if ( special[ type ] ) {
+							jQuery.event.remove( elem, type );
+
+						} else {
+							removeEvent( elem, type, data.handle );
+						}
 					}
 				}
 				
-				removeExpando( elem );
+				if ( deleteExpando ) {
+					delete elem[ jQuery.expando ];
+
+				} else if ( elem.removeAttribute ) {
+					elem.removeAttribute( jQuery.expando );
+				}
 				
 				delete cache[ id ];
 			}
