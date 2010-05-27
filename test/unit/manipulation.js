@@ -6,7 +6,7 @@ var functionReturningObj = function(value) { return (function() { return value; 
 test("text()", function() {
 	expect(2);
 	var expected = "This link has class=\"blog\": Simon Willison's Weblog";
-	equals( jQuery('#sap').text(), expected, 'Check for merged text of more then one element.' );
+	equals( jQuery('#sap').text(), expected, 'Check for merged text of more than one element.' );
 
 	// Check serialization of text values
 	equals( jQuery(document.createTextNode("foo")).text(), "foo", "Text node was retreived from .text()." );
@@ -246,7 +246,7 @@ var testAppend = function(valueObj) {
 	reset();
 	jQuery("form").append(valueObj('<input name="radiotest" type="radio" checked    =   \'checked\' />'));
 	jQuery("form input[name=radiotest]").each(function(){
-		ok( jQuery(this).is(':checked'), "Append alternately formated checked radio");
+		ok( jQuery(this).is(':checked'), "Append alternately formatted checked radio");
 	}).remove();
 
 	reset();
