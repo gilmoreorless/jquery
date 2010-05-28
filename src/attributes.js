@@ -269,7 +269,7 @@ jQuery.extend({
 				var parent = elem.parentNode;
 				if ( parent ) {
 					parent.selectedIndex;
-	
+
 					// Make sure that it also works with optgroups, see #5701
 					if ( parent.parentNode ) {
 						parent.parentNode.selectedIndex;
@@ -321,9 +321,9 @@ jQuery.extend({
 				elem.setAttribute( name, "" + value );
 			}
 
-			var attr = !jQuery.support.hrefNormalized && notxml && special ?
+			var attr = //!jQuery.support.hrefNormalized && notxml && special ?
 					// Some attributes require a special call on IE
-					elem.getAttribute( name, 2 ) :
+//					elem.getAttribute( name, 2 ) :
 					elem.getAttribute( name );
 
 			// Non-existent attributes return null, we normalize to undefined

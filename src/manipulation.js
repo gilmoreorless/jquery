@@ -28,9 +28,9 @@ wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.the
 wrapMap.th = wrapMap.td;
 
 // IE can't serialize <link> and <script> tags normally
-if ( !jQuery.support.htmlSerialize ) {
-	wrapMap._default = [ 1, "div<div>", "</div>" ];
-}
+//if ( !jQuery.support.htmlSerialize ) {
+//	wrapMap._default = [ 1, "div<div>", "</div>" ];
+//}
 
 jQuery.fn.extend({
 	text: function( text ) {
@@ -187,29 +187,29 @@ jQuery.fn.extend({
 	clone: function( events, props ) {
 		// Do the clone
 		var ret = this.map(function() {
-			if ( !jQuery.support.noCloneEvent && !jQuery.isXMLDoc(this) ) {
-				// IE copies events bound via attachEvent when
-				// using cloneNode. Calling detachEvent on the
-				// clone will also remove the events from the orignal
-				// In order to get around this, we use innerHTML.
-				// Unfortunately, this means some modifications to
-				// attributes in IE that are actually only stored
-				// as properties will not be copied (such as the
-				// the name attribute on an input).
-				var html = this.outerHTML, ownerDocument = this.ownerDocument;
-				if ( !html ) {
-					var div = ownerDocument.createElement("div");
-					div.appendChild( this.cloneNode(true) );
-					html = div.innerHTML;
-				}
-
-				return jQuery.clean([html.replace(rinlinejQuery, "")
-					// Handle the case in IE 8 where action=/test/> self-closes a tag
-					.replace(/\=([^="'>\s]+\/)>/g, '="$1">')
-					.replace(rleadingWhitespace, "")], ownerDocument)[0];
-			} else {
+//			if ( !jQuery.support.noCloneEvent && !jQuery.isXMLDoc(this) ) {
+//				// IE copies events bound via attachEvent when
+//				// using cloneNode. Calling detachEvent on the
+//				// clone will also remove the events from the orignal
+//				// In order to get around this, we use innerHTML.
+//				// Unfortunately, this means some modifications to
+//				// attributes in IE that are actually only stored
+//				// as properties will not be copied (such as the
+//				// the name attribute on an input).
+//				var html = this.outerHTML, ownerDocument = this.ownerDocument;
+//				if ( !html ) {
+//					var div = ownerDocument.createElement("div");
+//					div.appendChild( this.cloneNode(true) );
+//					html = div.innerHTML;
+//				}
+//
+//				return jQuery.clean([html.replace(rinlinejQuery, "")
+//					// Handle the case in IE 8 where action=/test/> self-closes a tag
+//					.replace(/\=([^="'>\s]+\/)>/g, '="$1">')
+//					.replace(rleadingWhitespace, "")], ownerDocument)[0];
+//			} else {
 				return this.cloneNode(true);
-			}
+//			}
 		});
 
 		// Copy the events from the original to the clone
@@ -238,7 +238,7 @@ jQuery.fn.extend({
 
 		// See if we can take a shortcut and just use innerHTML
 		} else if ( typeof value === "string" && !rnocache.test( value ) &&
-			(jQuery.support.leadingWhitespace || !rleadingWhitespace.test( value )) &&
+			/*(jQuery.support.leadingWhitespace || */!rleadingWhitespace.test( value )/*)*/ &&
 			!wrapMap[ (rtagName.exec( value ) || ["", ""])[1].toLowerCase() ] ) {
 
 			value = value.replace(rxhtmlTag, fcloseTag);
@@ -502,30 +502,30 @@ jQuery.extend({
 				}
 
 				// Remove IE's autoinserted <tbody> from table fragments
-				if ( !jQuery.support.tbody ) {
-
-					// String was a <table>, *may* have spurious <tbody>
-					var hasBody = rtbody.test(elem),
-						tbody = tag === "table" && !hasBody ?
-							div.firstChild && div.firstChild.childNodes :
-
-							// String was a bare <thead> or <tfoot>
-							wrap[1] === "<table>" && !hasBody ?
-								div.childNodes :
-								[];
-
-					for ( var j = tbody.length - 1; j >= 0 ; --j ) {
-						if ( jQuery.nodeName( tbody[ j ], "tbody" ) && !tbody[ j ].childNodes.length ) {
-							tbody[ j ].parentNode.removeChild( tbody[ j ] );
-						}
-					}
-
-				}
+//				if ( !jQuery.support.tbody ) {
+//
+//					// String was a <table>, *may* have spurious <tbody>
+//					var hasBody = rtbody.test(elem),
+//						tbody = tag === "table" && !hasBody ?
+//							div.firstChild && div.firstChild.childNodes :
+//
+//							// String was a bare <thead> or <tfoot>
+//							wrap[1] === "<table>" && !hasBody ?
+//								div.childNodes :
+//								[];
+//
+//					for ( var j = tbody.length - 1; j >= 0 ; --j ) {
+//						if ( jQuery.nodeName( tbody[ j ], "tbody" ) && !tbody[ j ].childNodes.length ) {
+//							tbody[ j ].parentNode.removeChild( tbody[ j ] );
+//						}
+//					}
+//
+//				}
 
 				// IE completely kills leading whitespace when innerHTML is used
-				if ( !jQuery.support.leadingWhitespace && rleadingWhitespace.test( elem ) ) {
-					div.insertBefore( context.createTextNode( rleadingWhitespace.exec(elem)[0] ), div.firstChild );
-				}
+//				if ( !jQuery.support.leadingWhitespace && rleadingWhitespace.test( elem ) ) {
+//					div.insertBefore( context.createTextNode( rleadingWhitespace.exec(elem)[0] ), div.firstChild );
+//				}
 
 				elem = div.childNodes;
 			}

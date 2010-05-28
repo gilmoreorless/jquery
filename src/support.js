@@ -2,10 +2,10 @@
 
 	jQuery.support = {};
 
-	var root = document.documentElement,
-		script = document.createElement("script"),
-		div = document.createElement("div"),
-		id = "script" + jQuery.now();
+	var //root = document.documentElement,
+//		script = document.createElement("script"),
+		div = document.createElement("div");//,
+//		id = "script" + jQuery.now();
 
 	div.style.display = "none";
 	div.innerHTML = "   <link/><table></table><a href='/a' style='color:red;float:left;opacity:.55;'>a</a><input type='checkbox'/>";
@@ -20,32 +20,32 @@
 
 	jQuery.support = {
 		// IE strips leading whitespace when .innerHTML is used
-		leadingWhitespace: div.firstChild.nodeType === 3,
+//		leadingWhitespace: div.firstChild.nodeType === 3,
 
 		// Make sure that tbody elements aren't automatically inserted
 		// IE will insert them into empty tables
-		tbody: !div.getElementsByTagName("tbody").length,
+//		tbody: !div.getElementsByTagName("tbody").length,
 
 		// Make sure that link elements get serialized correctly by innerHTML
 		// This requires a wrapper element in IE
-		htmlSerialize: !!div.getElementsByTagName("link").length,
+//		htmlSerialize: !!div.getElementsByTagName("link").length,
 
 		// Get the style information from getAttribute
 		// (IE uses .cssText insted)
-		style: /red/.test( a.getAttribute("style") ),
+//		style: /red/.test( a.getAttribute("style") ),
 
 		// Make sure that URLs aren't manipulated
 		// (IE normalizes it by default)
-		hrefNormalized: a.getAttribute("href") === "/a",
+//		hrefNormalized: a.getAttribute("href") === "/a",
 
 		// Make sure that element opacity exists
 		// (IE uses filter instead)
 		// Use a regex to work around a WebKit issue. See #5145
-		opacity: /^0.55$/.test( a.style.opacity ),
+//		opacity: /^0.55$/.test( a.style.opacity ),
 
 		// Verify style float existence
 		// (IE uses styleFloat instead of cssFloat)
-		cssFloat: !!a.style.cssFloat,
+//		cssFloat: !!a.style.cssFloat,
 
 		// Make sure that if no value is specified for a checkbox
 		// that it defaults to "on".
@@ -57,38 +57,38 @@
 		optSelected: document.createElement("select").appendChild( document.createElement("option") ).selected,
 
 		// Will be defined later
-		checkClone: false,
-		scriptEval: false,
-		noCloneEvent: true,
-		boxModel: null
+		checkClone: false//,
+//		scriptEval: false,
+//		noCloneEvent: true,
+//		boxModel: null
 	};
 
-	script.type = "text/javascript";
-	try {
-		script.appendChild( document.createTextNode( "window." + id + "=1;" ) );
-	} catch(e) {}
-
-	root.insertBefore( script, root.firstChild );
-
-	// Make sure that the execution of code works by injecting a script
-	// tag with appendChild/createTextNode
-	// (IE doesn't support this, fails, and uses .text instead)
-	if ( window[ id ] ) {
-		jQuery.support.scriptEval = true;
-		delete window[ id ];
-	}
-
-	root.removeChild( script );
-
-	if ( div.attachEvent && div.fireEvent ) {
-		div.attachEvent("onclick", function click() {
-			// Cloning a node shouldn't copy over any
-			// bound event handlers (IE does this)
-			jQuery.support.noCloneEvent = false;
-			div.detachEvent("onclick", click);
-		});
-		div.cloneNode(true).fireEvent("onclick");
-	}
+//	script.type = "text/javascript";
+//	try {
+//		script.appendChild( document.createTextNode( "window." + id + "=1;" ) );
+//	} catch(e) {}
+//
+//	root.insertBefore( script, root.firstChild );
+//
+//	// Make sure that the execution of code works by injecting a script
+//	// tag with appendChild/createTextNode
+//	// (IE doesn't support this, fails, and uses .text instead)
+//	if ( window[ id ] ) {
+//		jQuery.support.scriptEval = true;
+//		delete window[ id ];
+//	}
+//
+//	root.removeChild( script );
+//
+//	if ( div.attachEvent && div.fireEvent ) {
+//		div.attachEvent("onclick", function click() {
+//			// Cloning a node shouldn't copy over any
+//			// bound event handlers (IE does this)
+//			jQuery.support.noCloneEvent = false;
+//			div.detachEvent("onclick", click);
+//		});
+//		div.cloneNode(true).fireEvent("onclick");
+//	}
 
 	div = document.createElement("div");
 	div.innerHTML = "<input type='radio' name='radiotest' checked='checked'/>";
@@ -101,37 +101,37 @@
 
 	// Figure out if the W3C box model works as expected
 	// document.body must exist before we can do this
-	jQuery(function() {
-		var div = document.createElement("div");
-		div.style.width = div.style.paddingLeft = "1px";
-
-		document.body.appendChild( div );
-		jQuery.boxModel = jQuery.support.boxModel = div.offsetWidth === 2;
-		document.body.removeChild( div ).style.display = 'none';
-		div = null;
-	});
-
-	// Technique from Juriy Zaytsev
-	// http://thinkweb2.com/projects/prototype/detecting-event-support-without-browser-sniffing/
-	var eventSupported = function( eventName ) { 
-		var el = document.createElement("div"); 
-		eventName = "on" + eventName; 
-
-		var isSupported = (eventName in el); 
-		if ( !isSupported ) { 
-			el.setAttribute(eventName, "return;"); 
-			isSupported = typeof el[eventName] === "function"; 
-		} 
-		el = null; 
-
-		return isSupported; 
-	};
-	
-	jQuery.support.submitBubbles = eventSupported("submit");
-	jQuery.support.changeBubbles = eventSupported("change");
+//	jQuery(function() {
+//		var div = document.createElement("div");
+//		div.style.width = div.style.paddingLeft = "1px";
+//
+//		document.body.appendChild( div );
+//		jQuery.boxModel = jQuery.support.boxModel = div.offsetWidth === 2;
+//		document.body.removeChild( div ).style.display = 'none';
+//		div = null;
+//	});
+//
+//	// Technique from Juriy Zaytsev
+//	// http://thinkweb2.com/projects/prototype/detecting-event-support-without-browser-sniffing/
+//	var eventSupported = function( eventName ) {
+//		var el = document.createElement("div");
+//		eventName = "on" + eventName;
+//
+//		var isSupported = (eventName in el);
+//		if ( !isSupported ) {
+//			el.setAttribute(eventName, "return;");
+//			isSupported = typeof el[eventName] === "function";
+//		}
+//		el = null;
+//
+//		return isSupported;
+//	};
+//
+//	jQuery.support.submitBubbles = eventSupported("submit");
+//	jQuery.support.changeBubbles = eventSupported("change");
 
 	// release memory in IE
-	root = script = div = all = a = null;
+//	root = script = div = all = a = null;
 })();
 
 jQuery.props = {

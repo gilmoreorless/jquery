@@ -403,35 +403,35 @@ jQuery.extend({
 			return jQuery.ready();
 		}
 
-		// Mozilla, Opera and webkit nightlies currently support this event
-		if ( document.addEventListener ) {
+//		// Mozilla, Opera and webkit nightlies currently support this event
+//		if ( document.addEventListener ) {
 			// Use the handy event callback
 			document.addEventListener( "DOMContentLoaded", DOMContentLoaded, false );
 			
 			// A fallback to window.onload, that will always work
 			window.addEventListener( "load", jQuery.ready, false );
 
-		// If IE event model is used
-		} else if ( document.attachEvent ) {
-			// ensure firing before onload,
-			// maybe late but safe also for iframes
-			document.attachEvent("onreadystatechange", DOMContentLoaded);
-			
-			// A fallback to window.onload, that will always work
-			window.attachEvent( "onload", jQuery.ready );
-
-			// If IE and not a frame
-			// continually check to see if the document is ready
-			var toplevel = false;
-
-			try {
-				toplevel = window.frameElement == null;
-			} catch(e) {}
-
-			if ( document.documentElement.doScroll && toplevel ) {
-				doScrollCheck();
-			}
-		}
+//		// If IE event model is used
+//		} else if ( document.attachEvent ) {
+//			// ensure firing before onload,
+//			// maybe late but safe also for iframes
+//			document.attachEvent("onreadystatechange", DOMContentLoaded);
+//
+//			// A fallback to window.onload, that will always work
+//			window.attachEvent( "onload", jQuery.ready );
+//
+//			// If IE and not a frame
+//			// continually check to see if the document is ready
+//			var toplevel = false;
+//
+//			try {
+//				toplevel = window.frameElement == null;
+//			} catch(e) {}
+//
+//			if ( document.documentElement.doScroll && toplevel ) {
+//				doScrollCheck();
+//			}
+//		}
 	},
 
 	// See test/unit/core.js for details concerning isFunction.
@@ -516,11 +516,11 @@ jQuery.extend({
 
 			script.type = "text/javascript";
 
-			if ( jQuery.support.scriptEval ) {
+//			if ( jQuery.support.scriptEval ) {
 				script.appendChild( document.createTextNode( data ) );
-			} else {
-				script.text = data;
-			}
+//			} else {
+//				script.text = data;
+//			}
 
 			// Use insertBefore instead of appendChild to circumvent an IE6 bug.
 			// This arises when a base node is used (#2709).
@@ -770,49 +770,49 @@ if ( indexOf ) {
 
 // Verify that \s matches non-breaking spaces
 // (IE fails on this test)
-if ( !/\s/.test( "\xA0" ) ) {
-	trimLeft = /^[\s\xA0]+/;
-	trimRight = /[\s\xA0]+$/;
-}
+//if ( !/\s/.test( "\xA0" ) ) {
+//	trimLeft = /^[\s\xA0]+/;
+//	trimRight = /[\s\xA0]+$/;
+//}
 
 // All jQuery objects should point back to these
 rootjQuery = jQuery(document);
 
 // Cleanup functions for the document ready method
-if ( document.addEventListener ) {
+//if ( document.addEventListener ) {
 	DOMContentLoaded = function() {
 		document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
 		jQuery.ready();
 	};
-
-} else if ( document.attachEvent ) {
-	DOMContentLoaded = function() {
-		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
-		if ( document.readyState === "complete" ) {
-			document.detachEvent( "onreadystatechange", DOMContentLoaded );
-			jQuery.ready();
-		}
-	};
-}
+//
+//} else if ( document.attachEvent ) {
+//	DOMContentLoaded = function() {
+//		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
+//		if ( document.readyState === "complete" ) {
+//			document.detachEvent( "onreadystatechange", DOMContentLoaded );
+//			jQuery.ready();
+//		}
+//	};
+//}
 
 // The DOM ready check for Internet Explorer
-function doScrollCheck() {
-	if ( jQuery.isReady ) {
-		return;
-	}
-
-	try {
-		// If IE is used, use the trick by Diego Perini
-		// http://javascript.nwbox.com/IEContentLoaded/
-		document.documentElement.doScroll("left");
-	} catch(e) {
-		setTimeout( doScrollCheck, 1 );
-		return;
-	}
-
-	// and execute any waiting functions
-	jQuery.ready();
-}
+//function doScrollCheck() {
+//	if ( jQuery.isReady ) {
+//		return;
+//	}
+//
+//	try {
+//		// If IE is used, use the trick by Diego Perini
+//		// http://javascript.nwbox.com/IEContentLoaded/
+//		document.documentElement.doScroll("left");
+//	} catch(e) {
+//		setTimeout( doScrollCheck, 1 );
+//		return;
+//	}
+//
+//	// and execute any waiting functions
+//	jQuery.ready();
+//}
 
 // Expose jQuery to the global object
 window.jQuery = window.$ = jQuery;

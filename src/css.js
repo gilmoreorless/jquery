@@ -15,7 +15,7 @@ var rexclude = /z-?index|font-?weight|opacity|zoom|line-?height/i,
 	// cache check for defaultView.getComputedStyle
 	getComputedStyle = document.defaultView && document.defaultView.getComputedStyle,
 	// normalize float css property
-	styleFloat = jQuery.support.cssFloat ? "cssFloat" : "styleFloat",
+	styleFloat = /*jQuery.support.cssFloat ? */"cssFloat"/* : "styleFloat"*/,
 	fcamelCase = function( all, letter ) {
 		return letter.toUpperCase();
 	};
@@ -49,22 +49,22 @@ jQuery.extend({
 		var style = elem.style || elem, set = value !== undefined;
 
 		// IE uses filters for opacity
-		if ( !jQuery.support.opacity && name === "opacity" ) {
-			if ( set ) {
-				// IE has trouble with opacity if it does not have layout
-				// Force it by setting the zoom level
-				style.zoom = 1;
-
-				// Set the alpha filter to set the opacity
-				var opacity = parseInt( value, 10 ) + "" === "NaN" ? "" : "alpha(opacity=" + value * 100 + ")";
-				var filter = style.filter || jQuery.curCSS( elem, "filter" ) || "";
-				style.filter = ralpha.test(filter) ? filter.replace(ralpha, opacity) : opacity;
-			}
-
-			return style.filter && style.filter.indexOf("opacity=") >= 0 ?
-				(parseFloat( ropacity.exec(style.filter)[1] ) / 100) + "":
-				"";
-		}
+//		if ( !jQuery.support.opacity && name === "opacity" ) {
+//			if ( set ) {
+//				// IE has trouble with opacity if it does not have layout
+//				// Force it by setting the zoom level
+//				style.zoom = 1;
+//
+//				// Set the alpha filter to set the opacity
+//				var opacity = parseInt( value, 10 ) + "" === "NaN" ? "" : "alpha(opacity=" + value * 100 + ")";
+//				var filter = style.filter || jQuery.curCSS( elem, "filter" ) || "";
+//				style.filter = ralpha.test(filter) ? filter.replace(ralpha, opacity) : opacity;
+//			}
+//
+//			return style.filter && style.filter.indexOf("opacity=") >= 0 ?
+//				(parseFloat( ropacity.exec(style.filter)[1] ) / 100) + "":
+//				"";
+//		}
 
 		// Make sure we're using the right name for getting the float value
 		if ( rfloat.test( name ) ) {
@@ -101,15 +101,15 @@ jQuery.extend({
 		var ret, style = elem.style, filter;
 
 		// IE uses filters for opacity
-		if ( !jQuery.support.opacity && name === "opacity" && elem.currentStyle ) {
-			ret = ropacity.test(elem.currentStyle.filter || "") ?
-				(parseFloat(RegExp.$1) / 100) + "" :
-				"";
-
-			return ret === "" ?
-				"1" :
-				ret;
-		}
+//		if ( !jQuery.support.opacity && name === "opacity" && elem.currentStyle ) {
+//			ret = ropacity.test(elem.currentStyle.filter || "") ?
+//				(parseFloat(RegExp.$1) / 100) + "" :
+//				"";
+//
+//			return ret === "" ?
+//				"1" :
+//				ret;
+//		}
 
 		// Make sure we're using the right name for getting the float value
 		if ( rfloat.test( name ) ) {

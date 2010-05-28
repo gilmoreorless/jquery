@@ -110,8 +110,8 @@ jQuery.event = {
 					if ( elem.addEventListener ) {
 						elem.addEventListener( type, eventHandle, false );
 
-					} else if ( elem.attachEvent ) {
-						elem.attachEvent( "on" + type, eventHandle );
+//					} else if ( elem.attachEvent ) {
+//						elem.attachEvent( "on" + type, eventHandle );
 					}
 				}
 			}
@@ -525,17 +525,17 @@ jQuery.event = {
 	}
 };
 
-var removeEvent = document.removeEventListener ?
+var removeEvent = //document.removeEventListener ?
 	function( elem, type, handle ) {
 		if ( elem.removeEventListener ) {
 			elem.removeEventListener( type, handle, false );
 		}
-	} : 
-	function( elem, type, handle ) {
-		if ( elem.detachEvent ) {
-			elem.detachEvent( "on" + type, handle );
-		}
-	};
+	};// :
+//	function( elem, type, handle ) {
+//		if ( elem.detachEvent ) {
+//			elem.detachEvent( "on" + type, handle );
+//		}
+//	};
 
 jQuery.Event = function( src ) {
 	// Allow instantiation without the 'new' keyword
@@ -657,145 +657,145 @@ jQuery.each({
 });
 
 // submit delegation
-if ( !jQuery.support.submitBubbles ) {
-
-	jQuery.event.special.submit = {
-		setup: function( data, namespaces ) {
-			if ( this.nodeName.toLowerCase() !== "form" ) {
-				jQuery.event.add(this, "click.specialSubmit", function( e ) {
-					var elem = e.target, type = elem.type;
-
-					if ( (type === "submit" || type === "image") && jQuery( elem ).closest("form").length ) {
-						return trigger( "submit", this, arguments );
-					}
-				});
-	 
-				jQuery.event.add(this, "keypress.specialSubmit", function( e ) {
-					var elem = e.target, type = elem.type;
-
-					if ( (type === "text" || type === "password") && jQuery( elem ).closest("form").length && e.keyCode === 13 ) {
-						return trigger( "submit", this, arguments );
-					}
-				});
-
-			} else {
-				return false;
-			}
-		},
-
-		teardown: function( namespaces ) {
-			jQuery.event.remove( this, ".specialSubmit" );
-		}
-	};
-
-}
-
-// change delegation, happens here so we have bind.
-if ( !jQuery.support.changeBubbles ) {
-
-	var formElems = /textarea|input|select/i,
-
-	changeFilters,
-
-	getVal = function( elem ) {
-		var type = elem.type, val = elem.value;
-
-		if ( type === "radio" || type === "checkbox" ) {
-			val = elem.checked;
-
-		} else if ( type === "select-multiple" ) {
-			val = elem.selectedIndex > -1 ?
-				jQuery.map( elem.options, function( elem ) {
-					return elem.selected;
-				}).join("-") :
-				"";
-
-		} else if ( elem.nodeName.toLowerCase() === "select" ) {
-			val = elem.selectedIndex;
-		}
-
-		return val;
-	},
-
-	testChange = function testChange( e ) {
-		var elem = e.target, data, val;
-
-		if ( !formElems.test( elem.nodeName ) || elem.readOnly ) {
-			return;
-		}
-
-		data = jQuery.data( elem, "_change_data" );
-		val = getVal(elem);
-
-		// the current data will be also retrieved by beforeactivate
-		if ( e.type !== "focusout" || elem.type !== "radio" ) {
-			jQuery.data( elem, "_change_data", val );
-		}
-		
-		if ( data === undefined || val === data ) {
-			return;
-		}
-
-		if ( data != null || val ) {
-			e.type = "change";
-			return jQuery.event.trigger( e, arguments[1], elem );
-		}
-	};
-
-	jQuery.event.special.change = {
-		filters: {
-			focusout: testChange, 
-
-			click: function( e ) {
-				var elem = e.target, type = elem.type;
-
-				if ( type === "radio" || type === "checkbox" || elem.nodeName.toLowerCase() === "select" ) {
-					return testChange.call( this, e );
-				}
-			},
-
-			// Change has to be called before submit
-			// Keydown will be called before keypress, which is used in submit-event delegation
-			keydown: function( e ) {
-				var elem = e.target, type = elem.type;
-
-				if ( (e.keyCode === 13 && elem.nodeName.toLowerCase() !== "textarea") ||
-					(e.keyCode === 32 && (type === "checkbox" || type === "radio")) ||
-					type === "select-multiple" ) {
-					return testChange.call( this, e );
-				}
-			},
-
-			// Beforeactivate happens also before the previous element is blurred
-			// with this event you can't trigger a change event, but you can store
-			// information/focus[in] is not needed anymore
-			beforeactivate: function( e ) {
-				var elem = e.target;
-				jQuery.data( elem, "_change_data", getVal(elem) );
-			}
-		},
-
-		setup: function( data, namespaces ) {
-			if ( this.type === "file" ) {
-				return false;
-			}
-
-			for ( var type in changeFilters ) {
-				jQuery.event.add( this, type + ".specialChange", changeFilters[type] );
-			}
-
-			return formElems.test( this.nodeName );
-		},
-
-		teardown: function( namespaces ) {
-			jQuery.event.remove( this, ".specialChange" );
-
-			return formElems.test( this.nodeName );
-		}
-	};
-
-	changeFilters = jQuery.event.special.change.filters;
-}
+//if ( !jQuery.support.submitBubbles ) {
+//
+//	jQuery.event.special.submit = {
+//		setup: function( data, namespaces ) {
+//			if ( this.nodeName.toLowerCase() !== "form" ) {
+//				jQuery.event.add(this, "click.specialSubmit", function( e ) {
+//					var elem = e.target, type = elem.type;
+//
+//					if ( (type === "submit" || type === "image") && jQuery( elem ).closest("form").length ) {
+//						return trigger( "submit", this, arguments );
+//					}
+//				});
+//
+//				jQuery.event.add(this, "keypress.specialSubmit", function( e ) {
+//					var elem = e.target, type = elem.type;
+//
+//					if ( (type === "text" || type === "password") && jQuery( elem ).closest("form").length && e.keyCode === 13 ) {
+//						return trigger( "submit", this, arguments );
+//					}
+//				});
+//
+//			} else {
+//				return false;
+//			}
+//		},
+//
+//		teardown: function( namespaces ) {
+//			jQuery.event.remove( this, ".specialSubmit" );
+//		}
+//	};
+//
+//}
+//
+//// change delegation, happens here so we have bind.
+//if ( !jQuery.support.changeBubbles ) {
+//
+//	var formElems = /textarea|input|select/i,
+//
+//	changeFilters,
+//
+//	getVal = function( elem ) {
+//		var type = elem.type, val = elem.value;
+//
+//		if ( type === "radio" || type === "checkbox" ) {
+//			val = elem.checked;
+//
+//		} else if ( type === "select-multiple" ) {
+//			val = elem.selectedIndex > -1 ?
+//				jQuery.map( elem.options, function( elem ) {
+//					return elem.selected;
+//				}).join("-") :
+//				"";
+//
+//		} else if ( elem.nodeName.toLowerCase() === "select" ) {
+//			val = elem.selectedIndex;
+//		}
+//
+//		return val;
+//	},
+//
+//	testChange = function testChange( e ) {
+//		var elem = e.target, data, val;
+//
+//		if ( !formElems.test( elem.nodeName ) || elem.readOnly ) {
+//			return;
+//		}
+//
+//		data = jQuery.data( elem, "_change_data" );
+//		val = getVal(elem);
+//
+//		// the current data will be also retrieved by beforeactivate
+//		if ( e.type !== "focusout" || elem.type !== "radio" ) {
+//			jQuery.data( elem, "_change_data", val );
+//		}
+//
+//		if ( data === undefined || val === data ) {
+//			return;
+//		}
+//
+//		if ( data != null || val ) {
+//			e.type = "change";
+//			return jQuery.event.trigger( e, arguments[1], elem );
+//		}
+//	};
+//
+//	jQuery.event.special.change = {
+//		filters: {
+//			focusout: testChange,
+//
+//			click: function( e ) {
+//				var elem = e.target, type = elem.type;
+//
+//				if ( type === "radio" || type === "checkbox" || elem.nodeName.toLowerCase() === "select" ) {
+//					return testChange.call( this, e );
+//				}
+//			},
+//
+//			// Change has to be called before submit
+//			// Keydown will be called before keypress, which is used in submit-event delegation
+//			keydown: function( e ) {
+//				var elem = e.target, type = elem.type;
+//
+//				if ( (e.keyCode === 13 && elem.nodeName.toLowerCase() !== "textarea") ||
+//					(e.keyCode === 32 && (type === "checkbox" || type === "radio")) ||
+//					type === "select-multiple" ) {
+//					return testChange.call( this, e );
+//				}
+//			},
+//
+//			// Beforeactivate happens also before the previous element is blurred
+//			// with this event you can't trigger a change event, but you can store
+//			// information/focus[in] is not needed anymore
+//			beforeactivate: function( e ) {
+//				var elem = e.target;
+//				jQuery.data( elem, "_change_data", getVal(elem) );
+//			}
+//		},
+//
+//		setup: function( data, namespaces ) {
+//			if ( this.type === "file" ) {
+//				return false;
+//			}
+//
+//			for ( var type in changeFilters ) {
+//				jQuery.event.add( this, type + ".specialChange", changeFilters[type] );
+//			}
+//
+//			return formElems.test( this.nodeName );
+//		},
+//
+//		teardown: function( namespaces ) {
+//			jQuery.event.remove( this, ".specialChange" );
+//
+//			return formElems.test( this.nodeName );
+//		}
+//	};
+//
+//	changeFilters = jQuery.event.special.change.filters;
+//}
 
 function trigger( type, elem, args ) {
 	args[0].type = type;
@@ -803,7 +803,7 @@ function trigger( type, elem, args ) {
 }
 
 // Create "bubbling" focus and blur events
-if ( document.addEventListener ) {
+//if ( document.addEventListener ) {
 	jQuery.each({ focus: "focusin", blur: "focusout" }, function( orig, fix ) {
 		jQuery.event.special[ fix ] = {
 			setup: function() {
@@ -820,7 +820,7 @@ if ( document.addEventListener ) {
 			return jQuery.event.handle.call( this, e );
 		}
 	});
-}
+//}
 
 jQuery.each(["bind", "one"], function( i, name ) {
 	jQuery.fn[ name ] = function( type, data, fn ) {
@@ -1097,15 +1097,15 @@ jQuery.each( ("blur focus focusin focusout load resize scroll unload click dblcl
 // Window isn't included so as not to unbind existing unload events
 // More info:
 //  - http://isaacschlueter.com/2006/10/msie-memory-leaks/
-if ( window.attachEvent && !window.addEventListener ) {
-	window.attachEvent("onunload", function() {
-		for ( var id in jQuery.cache ) {
-			if ( jQuery.cache[ id ].handle ) {
-				// Try/Catch is to handle iframes being unloaded, see #4280
-				try {
-					jQuery.event.remove( jQuery.cache[ id ].handle.elem );
-				} catch(e) {}
-			}
-		}
-	});
-}
+//if ( window.attachEvent && !window.addEventListener ) {
+//	window.attachEvent("onunload", function() {
+//		for ( var id in jQuery.cache ) {
+//			if ( jQuery.cache[ id ].handle ) {
+//				// Try/Catch is to handle iframes being unloaded, see #4280
+//				try {
+//					jQuery.event.remove( jQuery.cache[ id ].handle.elem );
+//				} catch(e) {}
+//			}
+//		}
+//	});
+//}
